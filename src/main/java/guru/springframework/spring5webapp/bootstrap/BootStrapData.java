@@ -31,29 +31,44 @@ public class BootStrapData implements CommandLineRunner {
 		System.out.println("BootStrap 'run' started...");
 		
 		Publisher padd = new Publisher();
-		padd.setName("Murali");
+		padd.setName("Rajani");
 		padd.setAddress1("Kadugodi");
 		padd.setCity("Bangalore");
 		padd.setState("Karnataka");
 		padd.setZip("530067");
+		
+		Author rk = new Author("Rajani", "Kanth");
+		Book d1 = new Book("Dairy", "One");
+		//adding autor<->book
+		rk.getBooks().add(d1);
+		d1.getAuthors().add(rk);
+		//adding publisher<->book
+		d1.setPublisher(padd);
+		padd.getBooks().add(d1);
+				
+		//Many to Many: making between data
+		authorRepository.save(rk);
+		bookRepository.save(d1);
 		publisherRepository.save(padd);
 		
-		System.out.println("No. of publishers: " + publisherRepository.count());
+		Author nv = new Author("Namburi", "Venkata");
+		Book d2 = new Book("Dairy", "Two");
+		//adding autor<->book
+		nv.getBooks().add(d2);
+		d2.getAuthors().add(nv);
+		//adding publisher<->book
+		d2.setPublisher(padd);
+		padd.getBooks().add(d2);		
 		
-		Author mv = new Author("Murali", "Veligeti");
-		Book d1 = new Book("Dairy", "One");
+		//Many to Many: relation making between new data
+		authorRepository.save(nv);
+		bookRepository.save(d2);		
+		publisherRepository.save(padd);
 		
-		mv.getBooks().add(d1);
-		d1.getAuthors().add(mv);
-		
-		authorRepository.save(mv);
-		bookRepository.save(d1);
-				
 		System.out.println("No. of books: " + bookRepository.count());
 		System.out.println("No. of Authors: " + authorRepository.count());
-		
-		System.out.println("BootStrap 'run' stopped...");
+		System.out.println("No. of publishers: " + publisherRepository.count());
+		System.out.println("Publisher has " + padd.getBooks().size() + " book(s)");
+		//System.out.println("BootStrap 'run' stopped...");
 	}
-
-	
 }
